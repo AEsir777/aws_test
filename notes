@@ -1,0 +1,64 @@
+npm install -g aws-cdk
+
+python -m ensurepip --upgrade
+python -m pip install --upgrade pip
+# virtual environment manager
+python -m pip install --upgrade virtualenv 
+
+# create AWS CDK project
+mkdir my-project
+cd my-project
+cdk init app --language python
+
+# activate its virtual environment: allows the project's dependencies to
+# be installed locally in the project folder, instead of globally
+.\source .venv/bin/activate
+
+# after activating virutal enviroment for the first time
+# install the app's standard dependencies
+python -m pip install -r requirements.txt
+pip install --upgrade -r requirements.txt
+
+# Managing AWS Contruct Library modules
+- most AWS CDK constructs are in aws-cdk-lib
+- aws-cdk.SERVICE-NAME.alpha
+  https://pypi.org/search/?q=aws-cdk
+  https://docs.aws.amazon.com/cdk/api/v2/python/index.html
+
+# add dependencies manually/automaticaly into requirements.txt
+# ~= replace ==: allow upgrades to higher compatible version
+pip freeze 
+
+# Lambda                     # second argument to AWS CDK constructs
+lambda_                      construct_id
+
+# all AWS Contruct Libarary classes are instantiated using 3 args
+- scope: in which construct is being dfiend(its parent in the construct tree)
+- id         - props: key/value pairs that construct uses to configure the resources it creates
+               (nested data structure -> class takes its own keyword argument at instantiation)
+
+when extending methods from parant class
+- **kwargs: args dont care
+- error: does not expect
+
+# indicate a class implements a particular interface
+import jsii
+@jsii.implements
+
+stack: unit of deployment in the AWS CDK
+
+cdk ls # list all the stacks
+cdk synth # the clound assenbly includes a separate template for each stack for an app with multiple stacks
+cdk synth specific_stack
+cdk deploy app # deploy also deos synthesize
+
+# explicitly state the name of stackName prop
+MyStack(self, "not:a:stack:name", stack_name="this-is-stack-name")
+
+# bootstrap: process of creating containers in the AWS account and region
+# CDK uploads assets of stacks such as AWS Lambda or Docker images to containers
+# created during bottsrapping
+aws sts get-caller-identity # AWS account num
+aws configure get region    # default region
+cdk bootstrap aws://ACCOUNT-NUMBER/REGION
+# make sure bootstrap diff accounts and regions when bootstrapping
