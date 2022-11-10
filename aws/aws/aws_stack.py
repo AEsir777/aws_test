@@ -4,6 +4,7 @@ from aws_cdk import (
     # aws_sqs as sqs,
 )
 from constructs import Construct
+import aws_cdk.aws_ec2 as ec2
 
 class AwsStack(Stack):
 
@@ -17,3 +18,9 @@ class AwsStack(Stack):
         #     self, "AwsQueue",
         #     visibility_timeout=Duration.seconds(300),
         # )
+        self.vpc = ec2.Vpc(self, 'mainVPC', max_azs=2, # how many VPC object to use
+            subnet_configuration=[ec2.SubnetConfiguration(
+                subnet_type=ec2.SubnetType.PUBLIC, # controls Internet access, 
+                name='public-subnet', # name this subnet group
+                cidr_mask=24 # specifies the IP addresses in the range of individual subnets in the group
+            )] )
